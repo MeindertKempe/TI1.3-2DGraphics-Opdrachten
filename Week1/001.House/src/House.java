@@ -5,6 +5,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+
 public class House extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -17,6 +21,15 @@ public class House extends Application {
 
 
     public void draw(FXGraphics2D graphics) {
+        graphics.setStroke(new BasicStroke(2));
+        graphics.draw(new Line2D.Double(150, 50, 50, 190));
+        graphics.draw(new Line2D.Double(150, 50, 250, 190));
+        graphics.draw(new Line2D.Double(50, 190, 50, 320));
+        graphics.draw(new Line2D.Double(250, 190, 250, 320));
+        graphics.draw(new Line2D.Double(50, 320, 250, 320));
+        graphics.setStroke(new BasicStroke(1));
+        graphics.draw(new Rectangle2D.Double(80, 240, 50, 80));
+        graphics.draw(new Rectangle2D.Double(150, 220, 90, 60));
     }
 
 
