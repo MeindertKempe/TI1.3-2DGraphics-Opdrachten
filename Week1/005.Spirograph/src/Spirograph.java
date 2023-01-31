@@ -1,30 +1,21 @@
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.ArrayList;
+import java.util.Random;
 
 import javafx.application.Application;
-
-import static javafx.application.Application.launch;
-
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.jfree.fx.FXGraphics2D;
 
 public class Spirograph extends Application {
-    private TextField v1;
-    private TextField v2;
-    private TextField v3;
-    private TextField v4;
-    private TextField color;
-    private Button draw;
-    private Button clear;
 
+    private Button randomise;
+    private Random random = new Random();
     private Canvas canvas;
 
     @Override
@@ -35,27 +26,14 @@ public class Spirograph extends Application {
         HBox topBar = new HBox();
         mainBox.getChildren().add(topBar);
         mainBox.getChildren().add(new Group(canvas));
+        topBar.getChildren().add(randomise = new Button("Randomise"));
+        randomise.setOnAction(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
 
-        topBar.getChildren().add(v1 = new TextField("300"));
-        topBar.getChildren().add(v2 = new TextField("1"));
-        topBar.getChildren().add(v3 = new TextField("300"));
-        topBar.getChildren().add(v4 = new TextField("10"));
-
-//        v1.textProperty().addListener(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
-//        v2.textProperty().addListener(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
-//        v3.textProperty().addListener(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
-//        v4.textProperty().addListener(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
-
-        topBar.getChildren().add(color = new TextField("#000000"));
-        topBar.getChildren().add(draw = new Button("Draw"));
-        topBar.getChildren().add(clear = new Button("Clear"));
-        draw.setOnAction(e -> draw(new FXGraphics2D(canvas.getGraphicsContext2D())));
-        clear.setOnAction(e -> clear(new FXGraphics2D(canvas.getGraphicsContext2D())));
 
         FXGraphics2D graphics = new FXGraphics2D(canvas.getGraphicsContext2D());
         graphics.translate(this.canvas.getWidth() / 2, this.canvas.getHeight() / 2);
         graphics.scale(1, -1);
-//        draw(graphics);
+        draw(graphics);
         primaryStage.setScene(new Scene(mainBox));
         primaryStage.setTitle("Spirograph");
         primaryStage.show();
@@ -67,17 +45,18 @@ public class Spirograph extends Application {
         //feel free to add more textfields or other controls if needed, but beware that swing components might clash in naming
         clear(graphics);
 
-        double a, b, c, d;
-        try {
-            a = Integer.parseInt(v1.getText());
-            b = Integer.parseInt(v2.getText());
-            c = Integer.parseInt(v3.getText());
-            d = Integer.parseInt(v4.getText());
-            graphics.setColor(Color.decode(this.color.getText()));
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            return;
+        for (int i = 0; i < random.nextInt(5) + 1; i++) {
+            spiroGraph(graphics);
         }
+
+    }
+
+    private void spiroGraph(FXGraphics2D graphics) {
+        double a = random.nextInt(100) + 150;
+        double b = random.nextInt(100);
+        double c = random.nextInt(100) + 150;
+        double d = random.nextInt(100);
+        graphics.setColor(Color.getHSBColor(random.nextFloat(), 1, 1));
 
         double res = 0.001;
         double scale = 1;
