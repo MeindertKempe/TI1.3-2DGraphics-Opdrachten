@@ -14,10 +14,28 @@ import org.jfree.fx.ResizableCanvas;
 
 public class Colors extends Application {
     private ResizableCanvas canvas;
+    private static final Color[] DEFAULT_COLORS;
+
+    static {
+        DEFAULT_COLORS = new Color[]{
+                Color.BLACK,
+                Color.BLUE,
+                Color.CYAN,
+                Color.DARK_GRAY,
+                Color.GRAY,
+                Color.GREEN,
+                Color.LIGHT_GRAY,
+                Color.MAGENTA,
+                Color.ORANGE,
+                Color.PINK,
+                Color.RED,
+                Color.WHITE,
+                Color.YELLOW
+        };
+    }
 
     @Override
-    public void start(Stage primaryStage) throws Exception
-    {
+    public void start(Stage primaryStage) throws Exception {
         BorderPane mainPane = new BorderPane();
         canvas = new ResizableCanvas(g -> draw(g), mainPane);
         mainPane.setCenter(canvas);
@@ -28,16 +46,27 @@ public class Colors extends Application {
     }
 
 
-    public void draw(FXGraphics2D graphics)
-    {
+    public void draw(FXGraphics2D graphics) {
         graphics.setTransform(new AffineTransform());
         graphics.setBackground(Color.white);
         graphics.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+
+        double width = canvas.getWidth() / DEFAULT_COLORS.length;
+        if (canvas.getHeight() < width) width = canvas.getHeight();
+
+        double unit = width / 6;
+        for (int i = 0; i < DEFAULT_COLORS.length; i++) {
+            Color old = graphics.getColor();
+            graphics.setColor(DEFAULT_COLORS[i]);
+            Rectangle2D.Double rectangle = new Rectangle2D.Double(width * i + unit, unit, unit * 4, unit * 4);
+            graphics.fill(rectangle);
+            graphics.setColor(old);
+            graphics.draw(rectangle);
+        }
     }
 
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         launch(Colors.class);
     }
 
