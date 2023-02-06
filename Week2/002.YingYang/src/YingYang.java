@@ -60,8 +60,11 @@ public class YingYang extends Application {
         yangSide.subtract(yinCircle);
         yangSide.add(yangCircle);
 
-        graphics.draw(yangSide);
+        graphics.setColor(Color.WHITE);
+        graphics.fill(yangSide);
+        graphics.setColor(Color.BLACK);
         graphics.fill(yinSide);
+        graphics.draw(yinyangCircle);
     }
 
 
