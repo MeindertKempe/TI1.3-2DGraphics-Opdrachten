@@ -34,23 +34,52 @@ public class FadingImage extends Application {
 		draw(g2d);
             }
         }.start();
-        
+
+        img1 = ImageIO.read(FadingImage.class.getResource("img/img1.png"));
+        img2 = ImageIO.read(FadingImage.class.getResource("img/img2.jpg"));
+
         stage.setScene(new Scene(mainPane));
         stage.setTitle("Fading image");
         stage.show();
         draw(g2d);
+
     }
-    
+
+    private BufferedImage img1;
+    private BufferedImage img2;
+
     
     public void draw(FXGraphics2D graphics) {
-        graphics.setTransform(new AffineTransform());
+        AffineTransform a = new AffineTransform();
+        graphics.setTransform(a);
         graphics.setBackground(Color.white);
         graphics.clearRect(0, 0, (int)canvas.getWidth(), (int)canvas.getHeight());
+
+
+        graphics.drawImage(img1, 0, 0, null);
+        if (blend != 0) {
+            graphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, blend));
+            graphics.drawImage(img2, 0, 0, null);
+        }
     }
-    
+
+    float blend = 0;
+    double wait = 0;
 
     public void update(double deltaTime) {
-	
+        if (wait >= 0) {
+            wait -= deltaTime;
+            return;
+        }
+        blend += (deltaTime/5);
+
+        if (blend >= 1.0) {
+            blend = 0;
+            wait = 2;
+            BufferedImage temp = img1;
+            img1 = img2;
+            img2 = temp;
+        }
     }
 
     public static void main(String[] args) {
